@@ -110,8 +110,19 @@
     grid-area: input; 
     text-align: right; 
     padding-bottom: 10px; 
-    padding-top: 15px;
+    padding-top: 25px;
+    font-size: 25px;
     background-color: lightcyan;
+}
+
+.last-expression-text {
+    grid-area: last; 
+    background-color: lightcyan;
+    text-align: right; 
+    position: relative; 
+    top: 31px;
+    right: 23px;
+    border: none;
 }
 .calculator {
     display: grid; 
@@ -119,12 +130,13 @@
     grid-template-columns: 100px 100px 100px 100px;
     margin: 0 auto;
     grid-template-areas: 
+        ". . . last"
         "input input input input"
         "del del clear clear"
         "nine eight seven add"
         "six five four subtract"
         "three two one multiply"
         "decimal zero divide equal";
-
-    background-color: lightgoldenrodyellow 
+    background-color: lightgoldenrodyellow;
+    padding-bottom: 20px; 
 }
