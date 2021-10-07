@@ -52,7 +52,7 @@ function equal() {
 
     previousExpression.value = expressionOutput; 
     input.value = finalValue.toString(); 
-    expressionOutput = ""; 
+    expressionOutput = `${finalValue.toString()}`; 
 
     return;
     //return finalValue; 
@@ -82,11 +82,12 @@ function operationListeners() {
                     equal(); 
                     break;
                 case "-": 
-                    expressionOutput += `0 ${num.target.textContent} `; 
-                    input.value = `${expressionOutput}`; 
-                    console.log("case -: " + expressionOutput); 
+                  //  expressionOutput += `0 ${num.target.textContent} `; 
+                   // input.value = `${expressionOutput}`; 
+                   // console.log("case -: " + expressionOutput); 
                     break;
                 default: 
+                    console.log(`|${expressionOutput}|`);
                     expressionOutput += " " + num.target.textContent + " "; 
                     input.value = expressionOutput; 
                         //console.log(expressionOutput); 
