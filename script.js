@@ -62,25 +62,27 @@ function checkExpression(operator, expression) {
     let ops = operator; 
     let nextNumber = false;
     let fullExpression = false; 
+    let isNegative = false;
+    let noWhiteSpaceExpression = expression.replace(/\s/g, ""); 
 
-    for(let i = 0; i < expression.length; i++) {
-        if ( expression.charAt(i) === "+" || expression.charAt(i) === "-" ) {
+    for(let i = 0; i < noWhiteSpaceExpression.length; i++) {
+        if ( noWhiteSpaceExpression.charAt(i) === "+" || noWhiteSpaceExpression.charAt(i) === "-" ) {
             nextNumber = true; 
-        } else if ( expression.charAt(i) === "=" ) {
+        } else if ( noWhiteSpaceExpression.charAt(i) === "=" ) {
             // Full expression, do nothing
             //console.log(previousExpression.value); 
             //return -2; 
             fullExpression = true; 
             break; 
         } else if ( !nextNumber ) {
-            numOne += expression.charAt(i); 
+            numOne += noWhiteSpaceExpression.charAt(i); 
         } else if ( nextNumber ) {
-            numTwo += expression.charAt(i); 
+            numTwo += noWhiteSpaceExpression.charAt(i); 
         } 
     }
 
     console.log("In checkExpression()"); 
-    console.log(`${numOne} ${operator} |${numTwo.charCodeAt(0)}|`);
+    console.log(`${numOne} ${operator} |${numTwo}|`);
     console.log(`${expression}`);
 
     if ( numOne.localeCompare("") !== 0 && numTwo.localeCompare("") === 0 ) { 
@@ -103,6 +105,45 @@ function checkExpression(operator, expression) {
 
     return 1; // Both have values
 
+
+}
+
+function negativeExpressions(expression) {
+    let numOne = "";
+    let numTwo = ""; 
+    let ops = ""; 
+    let nextNumber = false;
+    let fullExpression = false; 
+    let isNegativeOne = false;
+    let isNegativeTwo = false;
+    let express = expression.replace(/\s/g, ""); 
+    // 4 - 5 = -1
+    // numOne = 
+    for(let i = 0; i < express.length; i++) {
+        if ( express.charAt(i) === "-" && numOne.localeCompare("") === 0 ) {
+            isNegativeOne = true; 
+            numOne += express.charAt(i); 
+        } else if ( isNegativeOne && numOne.localeCompare("") !== 0 && (express.charAt(i) === "+" || express.charAt(i) === "-") ) {
+            ops += express.charAt(i); 
+        } else if ( !isNegativeOne && numOne.localeCompare("") !== 0 && (express.charAt(i) === "+" || express.charAt(i) === "-") ) {
+            ops += express.charAt(i); 
+        } else if ( isNegativeOne ) {
+            numOne += express.charAt(i);  
+        } else if ( !isNegativeOne && numOne.localeCompare("") === 0 ) {
+            numOne += express.charAt(i); 
+        } else {
+            numTwo += express.charAt(i); 
+        }
+    }
+
+    console.log("-----------------------------"); 
+    console.log("IN NEGATIVE EXPRESSION");
+    console.log(`${numOne} ${ops} ${numTwo}`);
+    console.log("-----------------------------"); 
+
+    if ( isNegativeOne ) {
+        return -4;
+    }
 
 }
 
@@ -130,16 +171,22 @@ function operationListeners() {
                     break; 
                 case "=": 
                     let resEqual = checkExpression("=", expressionOutput);
-                    
+                    let negative = negativeExpressions(expressionOutput); 
                     
                     console.log("resEqual: " + resEqual); 
+                    console.log("negative: " + negative); 
+
+                    if ( negative === -4 ) {
+
+                    }
+
                     if ( resEqual === 1 ) {
                         result = equal(expressionOutput); 
                         expressionOutput += ` = ${result}`;
                         previousExpression.value = expressionOutput;
                         input.value = result; 
                         expressionOutput = `${result}`; 
-                    }
+                    } 
 
                     break; 
                 case "+": 
