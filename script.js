@@ -13,10 +13,10 @@ function clear() {
 }
 
 function add(numberOne, numberTwo) {
-    //console.log(expressionOutput);
-   // console.log("IN ADD!");
-    //console.log(numberOne + "|" + numberTwo);
-    return +numberOne + +numberTwo; 
+    console.log("IN ADD!");
+    console.log(`${expressionOutput} | ${-1+5}`);
+    console.log(numberOne + "|" + numberTwo);
+    return Number(numberOne) + Number(numberTwo); 
 }
 
 function subtract(numberOne, numberTwo) {
@@ -31,42 +31,73 @@ function equal(expression) {
     let ops = ""; 
     let nextNumber = false;
     let finalValue = 0; 
+    let isNegative = false; 
+    let noSpaceExpression = expression.replace(/\s/g, ""); 
 
-    for(let i = 0; i < expression.length; i++) {
-        if ( expression.charAt(i) === "+" || expression.charAt(i) === "-" ) {
-            ops = expression.charAt(i); 
+    if ( noSpaceExpression.charAt(0) === "-" ) {
+        isNegative = true; 
+       // numOne += noSpaceExpression.charAt(0); 
+    }
+
+    for(let i = 0; i < noSpaceExpression.length; i++) {
+        //console.log(`--|${numOne}| |${ops}| |${numTwo}|--`);
+        if ( isNegative ) {
+            numOne += noSpaceExpression.charAt(i); 
+            isNegative = false; 
+        } else if ( noSpaceExpression.charAt(i) === "+" || noSpaceExpression.charAt(i) === "-" ) {
+            ops = noSpaceExpression.charAt(i); 
             nextNumber = true; 
         } else if ( !nextNumber ) {
-            numOne += expression.charAt(i); 
+            numOne += noSpaceExpression.charAt(i); 
         } else if ( nextNumber ) {
-            numTwo += expression.charAt(i); 
+            numTwo += noSpaceExpression.charAt(i); 
         }
     }
 
+    console.log(`--|${numOne}| |${ops}| |${numTwo}|--`);
     if ( ops.localeCompare("+") === 0 ) {
-        finalValue = add(+numOne, +numTwo); 
+        finalValue = add(numOne, numTwo); 
     } else if ( ops.localeCompare("-") === 0 ) {
         finalValue = subtract(+numOne, +numTwo); 
     }
 
+    console.log(`In equal(): ${expression.replace(/\s/g, "")}
+                 finalValue: ${finalValue}` );
     return finalValue.toString();
 }
 
-function checkExpression(operator, expression) {
+function checkExpression(expression) {
     // Case 1: 1 + 2 
     // Case 2:   + 2 
     // Case 3: 2 + = 
 
     let numOne = "";
     let numTwo = ""; 
-    let ops = operator; 
+    let ops = ""; 
     let nextNumber = false;
     let fullExpression = false; 
     let isNegative = false;
     let noWhiteSpaceExpression = expression.replace(/\s/g, ""); 
+    // 4-5
+    console.log("----------------------------------------");
+    console.log("In checkExpression()"); 
+    console.log(`Expression: ${noWhiteSpaceExpression}`)
 
+    if ( noWhiteSpaceExpression.charAt(0) === "-" ) {
+        isNegative = true; 
+    }
+
+   // console.log(`${noWhiteSpaceExpression}`);
     for(let i = 0; i < noWhiteSpaceExpression.length; i++) {
+      //  if ( noWhiteSpaceExpression.charAt(0) === '-' ) {
+            //return 0;
+        if ( isNegative ) {
+            isNegative = false;
+            numOne += noWhiteSpaceExpression.charAt(i); 
+        } else
+        
         if ( noWhiteSpaceExpression.charAt(i) === "+" || noWhiteSpaceExpression.charAt(i) === "-" ) {
+            ops += noWhiteSpaceExpression.charAt(i);
             nextNumber = true; 
         } else if ( noWhiteSpaceExpression.charAt(i) === "=" ) {
             // Full expression, do nothing
@@ -81,9 +112,9 @@ function checkExpression(operator, expression) {
         } 
     }
 
-    console.log("In checkExpression()"); 
-    console.log(`${numOne} ${operator} |${numTwo}|`);
-    console.log(`${expression}`);
+  //  console.log("In checkExpression()"); 
+    console.log(`|${numOne}| ${ops} |${numTwo}|`);
+    console.log("----------------------------------------");
 
     if ( numOne.localeCompare("") !== 0 && numTwo.localeCompare("") === 0 ) { 
         // numOne has value, but numTwo is empty
@@ -151,10 +182,10 @@ function numberListeners() {
     for(let i = 0; i < numbers.length; i++) {
         numbers[i].addEventListener("click", function(num) {
 
-            //let check = checkExpression()
             expressionOutput += num.target.textContent; 
+            let check = checkExpression(expressionOutput);
             
-            //console.log(expressionOutput); 
+            console.log(expressionOutput); 
             input.value = expressionOutput; 
             //console.log(num.target.textContent); 
         });
@@ -170,18 +201,19 @@ function operationListeners() {
                     clear(); 
                     break; 
                 case "=": 
-                    let resEqual = checkExpression("=", expressionOutput);
-                    let negative = negativeExpressions(expressionOutput); 
+                    let resEqual = checkExpression(expressionOutput);
+                    //let negative = negativeExpressions(expressionOutput); 
                     
                     console.log("resEqual: " + resEqual); 
-                    console.log("negative: " + negative); 
+                  //  console.log("negative: " + negative); 
 
-                    if ( negative === -4 ) {
+                 //   if ( negative === -4 ) {
 
-                    }
+                   // }
 
                     if ( resEqual === 1 ) {
                         result = equal(expressionOutput); 
+                        console.log(`In resEqual: ${result}`);
                         expressionOutput += ` = ${result}`;
                         previousExpression.value = expressionOutput;
                         input.value = result; 
@@ -190,17 +222,18 @@ function operationListeners() {
 
                     break; 
                 case "+": 
-                    let resPlus = checkExpression("+", expressionOutput); 
+                    let resPlus = checkExpression(expressionOutput); 
                     console.log("resPlus: " + resPlus); 
 
                     if ( resPlus === 3 ) {
+                        console.log(`Expression: |${expressionOutput.replace(/\s/g, "")}|`);
                         expressionOutput += `0 + `;
                         input.value = expressionOutput; 
                     } else if ( resPlus === 0 ) {
                         expressionOutput += ` + `;
                         input.value = expressionOutput;  
                     } else if ( resPlus === 1 ) { // Both values, continue adding
-                        let check = checkExpression("+", expressionOutput); 
+                        let check = checkExpression(expressionOutput); 
                         if ( check === 1 ) { // 2 values are typed and + is clicked
                             result = equal(expressionOutput); 
                             expressionOutput = `${result} + `; 
@@ -217,7 +250,9 @@ function operationListeners() {
 
                     break; 
                 case "-": 
-                    let resMinus = checkExpression("-", expressionOutput); 
+                    let resMinus = checkExpression(expressionOutput); 
+
+                    console.log(`resMinus: ${resMinus}`);
 
                     if ( resMinus === 3 ) {
                         expressionOutput += `0 - `;
@@ -226,7 +261,7 @@ function operationListeners() {
                         expressionOutput += ` - `;
                         input.value = expressionOutput;  
                     } else if ( resMinus === 1 ) { // Both values, continue adding
-                        let check = checkExpression("-", expressionOutput); 
+                        let check = checkExpression(expressionOutput); 
                         if ( check === 1 ) { // 2 values are typed and + is clicked
                             result = equal(expressionOutput); 
                             expressionOutput = `${result} - `; 
