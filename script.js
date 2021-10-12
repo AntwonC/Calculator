@@ -2,6 +2,7 @@ const numbers = document.querySelectorAll(".number");
 const operation = document.querySelectorAll(".operation");
 const input = document.querySelector(".calculator-input");
 const previousExpression = document.querySelector(".last-expression-text");
+const decimalButton = document.querySelector("#decimal"); 
 
 let expressionOutput = "";
 let result = ""; 
@@ -13,15 +14,28 @@ function clear() {
 }
 
 function add(numberOne, numberTwo) {
-    console.log("IN ADD!");
-    console.log(`${expressionOutput} | ${-1+5}`);
-    console.log(numberOne + "|" + numberTwo);
-    return Number(numberOne) + Number(numberTwo); 
+    //console.log("IN ADD!");
+    //console.log(`${expressionOutput} | ${-1+5}`);
+    //console.log(numberOne + "|" + numberTwo);
+    return +numberOne + +numberTwo; 
 }
 
 function subtract(numberOne, numberTwo) {
     //console.log(expressionOutput);
     return +numberOne - +numberTwo; 
+}
+
+function multiply(numberOne, numberTwo) {
+    //console.log(expressionOutput);
+    return (+numberOne) * (+numberTwo); 
+}
+
+function divide(numberOne, numberTwo) {
+    //console.log(expressionOutput);
+    if ( numberTwo === 0 ) {
+        return "Why are you dividing by 0?"; 
+    }
+    return (+numberOne) / (+numberTwo); 
 }
 
 function equal(expression) {
@@ -32,6 +46,7 @@ function equal(expression) {
     let nextNumber = false;
     let finalValue = 0; 
     let isNegative = false; 
+    let operatorCounter = 0; 
     let noSpaceExpression = expression.replace(/\s/g, ""); 
 
     if ( noSpaceExpression.charAt(0) === "-" ) {
@@ -44,7 +59,7 @@ function equal(expression) {
         if ( isNegative ) {
             numOne += noSpaceExpression.charAt(i); 
             isNegative = false; 
-        } else if ( noSpaceExpression.charAt(i) === "+" || noSpaceExpression.charAt(i) === "-" ) {
+        } else if ( noSpaceExpression.charAt(i) === "+" || noSpaceExpression.charAt(i) === "-" || noSpaceExpression.charAt(i) === "*" || noSpaceExpression.charAt(i) === "/") {
             ops = noSpaceExpression.charAt(i); 
             nextNumber = true; 
         } else if ( !nextNumber ) {
@@ -59,6 +74,10 @@ function equal(expression) {
         finalValue = add(numOne, numTwo); 
     } else if ( ops.localeCompare("-") === 0 ) {
         finalValue = subtract(+numOne, +numTwo); 
+    } else if ( ops.localeCompare("*") === 0 ) {
+        finalValue = multiply(+numOne, +numTwo); 
+    } else if ( ops.localeCompare("/") === 0 ) {
+        finalValue = divide(+numOne, +numTwo); 
     }
 
     console.log(`In equal(): ${expression.replace(/\s/g, "")}
@@ -77,6 +96,9 @@ function checkExpression(expression) {
     let nextNumber = false;
     let fullExpression = false; 
     let isNegative = false;
+    let operatorPresent = false; 
+    let decimalExists = false; 
+    let operatorIndex = 0; 
     let noWhiteSpaceExpression = expression.replace(/\s/g, ""); 
     // 4-5
     console.log("----------------------------------------");
@@ -91,13 +113,19 @@ function checkExpression(expression) {
     for(let i = 0; i < noWhiteSpaceExpression.length; i++) {
       //  if ( noWhiteSpaceExpression.charAt(0) === '-' ) {
             //return 0;
-        if ( isNegative ) {
+        if ( noWhiteSpaceExpression.charAt(i) === "." ) {
+            decimalExists = true; 
+        } else if ( isNegative ) {
             isNegative = false;
             numOne += noWhiteSpaceExpression.charAt(i); 
-        } else
-        
-        if ( noWhiteSpaceExpression.charAt(i) === "+" || noWhiteSpaceExpression.charAt(i) === "-" ) {
+        } //else if ( operatorCounter === 1 ) {
+           // operatorCounter--;
+            //return 10;
+         else if ( noWhiteSpaceExpression.charAt(i) === "+" || noWhiteSpaceExpression.charAt(i) === "-" || noWhiteSpaceExpression.charAt(i) === "*" || noWhiteSpaceExpression.charAt(i) === "/" ) {
             ops += noWhiteSpaceExpression.charAt(i);
+            //console.log(`i: ${i}`); 
+            operatorIndex = i+1; 
+            //operatorCounter++; 
             nextNumber = true; 
         } else if ( noWhiteSpaceExpression.charAt(i) === "=" ) {
             // Full expression, do nothing
@@ -109,9 +137,15 @@ function checkExpression(expression) {
             numOne += noWhiteSpaceExpression.charAt(i); 
         } else if ( nextNumber ) {
             numTwo += noWhiteSpaceExpression.charAt(i); 
-        } 
+        }
     }
 
+
+  /*  if ( noWhiteSpaceExpression.includes("+", operatorIndex) || noWhiteSpaceExpression.includes("-", operatorIndex) ) {
+        operatorPresent = true; 
+        return -5; 
+    } */
+    console.log(`${operatorPresent} | ${operatorIndex}`); 
   //  console.log("In checkExpression()"); 
     console.log(`|${numOne}| ${ops} |${numTwo}|`);
     console.log("----------------------------------------");
@@ -132,9 +166,56 @@ function checkExpression(expression) {
         return -1; 
     } else if ( fullExpression ) { // Avoids NaN 
         return -2; 
-    }
+    } 
 
     return 1; // Both have values
+
+
+}
+
+function checkDecimal(expression) {
+
+    let numOne = "";
+    let numTwo = ""; 
+    let ops = ""; 
+    let nextNumber = false;
+    let fullExpression = false; 
+    let isNegative = false;
+
+    let decimalExists = false; 
+
+    let noWhiteSpaceExpression = expression.replace(/\s/g, ""); 
+
+    for(let i = 0; i < noWhiteSpaceExpression.length; i++) {
+        //  if ( noWhiteSpaceExpression.charAt(0) === '-' ) {
+              //return 0;
+          if ( noWhiteSpaceExpression.charAt(i) === "." ) {
+              decimalExists = true; 
+          } else if ( isNegative ) {
+              isNegative = false;
+              numOne += noWhiteSpaceExpression.charAt(i); 
+          } else if ( noWhiteSpaceExpression.charAt(i) === "+" || noWhiteSpaceExpression.charAt(i) === "-" || noWhiteSpaceExpression.charAt(i) === "*" || noWhiteSpaceExpression.charAt(i) === "/" ) {
+              ops += noWhiteSpaceExpression.charAt(i);
+              //console.log(`i: ${i}`); 
+              nextNumber = true; 
+          } else if ( noWhiteSpaceExpression.charAt(i) === "=" ) {
+              // Full expression, do nothing
+              //console.log(previousExpression.value); 
+              //return -2; 
+              fullExpression = true; 
+              break; 
+          } else if ( !nextNumber ) {
+              numOne += noWhiteSpaceExpression.charAt(i); 
+          } else if ( nextNumber ) {
+              numTwo += noWhiteSpaceExpression.charAt(i); 
+          }
+      }
+
+      if ( decimalExists ) {
+          return 1; 
+      } else {
+          return 0; 
+      }
 
 
 }
@@ -184,7 +265,7 @@ function numberListeners() {
 
             expressionOutput += num.target.textContent; 
             let check = checkExpression(expressionOutput);
-            
+
             console.log(expressionOutput); 
             input.value = expressionOutput; 
             //console.log(num.target.textContent); 
@@ -207,9 +288,6 @@ function operationListeners() {
                     console.log("resEqual: " + resEqual); 
                   //  console.log("negative: " + negative); 
 
-                 //   if ( negative === -4 ) {
-
-                   // }
 
                     if ( resEqual === 1 ) {
                         result = equal(expressionOutput); 
@@ -239,7 +317,7 @@ function operationListeners() {
                             expressionOutput = `${result} + `; 
                             previousExpression.value = expressionOutput; 
                             input.value = expressionOutput;
-                            expressionOutput = "";
+                            expressionOutput = `${result} + `;
                         }
                        // result = ""; 
                     } else if ( resPlus == -2 ) { // Just add the operator to continue the program
@@ -275,6 +353,77 @@ function operationListeners() {
                         input.value = expressionOutput; 
                     }
                     
+                    break; 
+                case "*": 
+                    let resMultiply = checkExpression(expressionOutput); 
+
+                    console.log(`resMultiply: ${resMultiply}`);
+
+                    if ( resMultiply === 3 ) {
+                        expressionOutput += `0 * `;
+                        input.value = expressionOutput; 
+                    } else if ( resMultiply === 0 ) {
+                        expressionOutput += ` * `;
+                        input.value = expressionOutput;  
+                    } else if ( resMultiply === 1 ) { // Both values, continue adding
+                        let check = checkExpression(expressionOutput); 
+                        if ( check === 1 ) { // 2 values are typed and + is clicked
+                            result = equal(expressionOutput); 
+                            expressionOutput = `${result} * `; 
+                            previousExpression.value = expressionOutput; 
+                            input.value = expressionOutput;
+                        }
+                       // result = ""; 
+                    } else if ( resMultiply == -2 ) { // Just add the operator to continue the program
+                        // Fixes the bug of NaN when pressing "=" button when there is already a result
+                        expressionOutput = `${result} * `; 
+                        input.value = expressionOutput; 
+                    }
+                    
+                    break;     
+                case "/": 
+                    let resDivide = checkExpression(expressionOutput); 
+
+                    console.log(`resDivide: ${resDivide}`);
+
+                    if ( resDivide === 3 ) {
+                        expressionOutput += `0 / `;
+                        input.value = expressionOutput; 
+                    } else if ( resDivide === 0 ) {
+                        expressionOutput += ` / `;
+                        input.value = expressionOutput;  
+                    } else if ( resDivide === 1 ) { // Both values, continue adding
+                        let check = checkExpression(expressionOutput); 
+                        if ( check === 1 ) { // 2 values are typed and + is clicked
+                            result = equal(expressionOutput); 
+                            expressionOutput = `${result} / `; 
+                            previousExpression.value = expressionOutput; 
+                            input.value = expressionOutput;
+                        }
+                       // result = ""; 
+                    } else if ( resDivide == -2 ) { // Just add the operator to continue the program
+                        // Fixes the bug of NaN when pressing "=" button when there is already a result
+                        expressionOutput = `${result} / `; 
+                        input.value = expressionOutput; 
+                    }
+                    
+                    break;  
+                case ".": 
+                    let resDecimal = checkDecimal(expressionOutput); 
+
+                    console.log(`resDecimal: ${resDecimal}`);
+
+                    if ( resDecimal === 1 ) {
+                        expressionOutput += ".";
+                        input.value = expressionOutput; 
+                        decimalButton.disabled = true; 
+                        
+                    } else {
+                        expressionOutput += ".";
+                        input.value = expressionOutput; 
+                        decimalButton.disabled = false; 
+                    }
+
                     break; 
                 default: 
                     console.log(`|${expressionOutput}|`);

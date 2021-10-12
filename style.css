@@ -103,6 +103,7 @@
 }
 
 .calculator-input {
+    max-width: 400px;
     width: 350px;
     margin: 0 auto;
     margin-bottom: 10px;
@@ -121,7 +122,8 @@
     text-align: right; 
     position: relative; 
     top: 31px;
-    right: 23px;
+    right: 277px;
+    width: 350px;
     border: none;
 }
 .calculator {
