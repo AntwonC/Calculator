@@ -13,6 +13,15 @@ function clear() {
     input.value = ""; 
 }
 
+function deleteButton() {
+    
+    previousExpression.value = expressionOutput; 
+    
+    //expressionOutput = previousExpression.value; 
+    console.log(`Expression: ${expressionOutput}`);
+    input.value = expressionOutput.substring(0, expressionOutput.length-2);
+}
+
 function add(numberOne, numberTwo) {
     //console.log("IN ADD!");
     //console.log(`${expressionOutput} | ${-1+5}`);
@@ -140,7 +149,6 @@ function checkExpression(expression) {
         }
     }
 
-
   /*  if ( noWhiteSpaceExpression.includes("+", operatorIndex) || noWhiteSpaceExpression.includes("-", operatorIndex) ) {
         operatorPresent = true; 
         return -5; 
@@ -182,20 +190,19 @@ function checkDecimal(expression) {
     let fullExpression = false; 
     let isNegative = false;
 
-    let decimalExists = false; 
+    let opExists = false; 
 
     let noWhiteSpaceExpression = expression.replace(/\s/g, ""); 
 
     for(let i = 0; i < noWhiteSpaceExpression.length; i++) {
         //  if ( noWhiteSpaceExpression.charAt(0) === '-' ) {
               //return 0;
-          if ( noWhiteSpaceExpression.charAt(i) === "." ) {
-              decimalExists = true; 
-          } else if ( isNegative ) {
+          if ( isNegative ) {
               isNegative = false;
               numOne += noWhiteSpaceExpression.charAt(i); 
           } else if ( noWhiteSpaceExpression.charAt(i) === "+" || noWhiteSpaceExpression.charAt(i) === "-" || noWhiteSpaceExpression.charAt(i) === "*" || noWhiteSpaceExpression.charAt(i) === "/" ) {
               ops += noWhiteSpaceExpression.charAt(i);
+              opExists = true; 
               //console.log(`i: ${i}`); 
               nextNumber = true; 
           } else if ( noWhiteSpaceExpression.charAt(i) === "=" ) {
@@ -211,11 +218,20 @@ function checkDecimal(expression) {
           }
       }
 
-      if ( decimalExists ) {
-          return 1; 
-      } else {
+      if ( numOne.includes(".") && !numTwo.includes(".") && opExists ) {
+          return -1;
+      } else if ( numOne.includes(".") && numTwo.includes(".") ) {
           return 0; 
+      } else if ( numOne.localeCompare("") === 0 && numTwo.localeCompare("") === 0 ) {
+          // numOne and numTwo are both empty, but "." is clicked. 
+          return -3;
+      } else if ( !numOne.includes(".") && !numTwo.includes(".") ) {
+          return -2; 
+      } else if ( numOne.includes(".") && !numTwo.includes(".") && !opExists ) {
+          return -5;
       }
+
+      return 1; 
 
 
 }
@@ -281,6 +297,9 @@ function operationListeners() {
                 case "Clear": 
                     clear(); 
                     break; 
+                case "Delete":
+                    deleteButton(); 
+                    break;
                 case "=": 
                     let resEqual = checkExpression(expressionOutput);
                     //let negative = negativeExpressions(expressionOutput); 
@@ -416,12 +435,22 @@ function operationListeners() {
                     if ( resDecimal === 1 ) {
                         expressionOutput += ".";
                         input.value = expressionOutput; 
-                        decimalButton.disabled = true; 
+                      //  decimalButton.disabled = true; 
                         
-                    } else {
+                    } else if ( resDecimal === 0 ) {
+                        //decimalButton.disabled = true; 
+                    } else if ( resDecimal === -2 ) {
                         expressionOutput += ".";
                         input.value = expressionOutput; 
-                        decimalButton.disabled = false; 
+                       
+                    } else if ( resDecimal === -1 ) {
+                        expressionOutput += "."; 
+                        input.value = expressionOutput; 
+                     
+                    } else if ( resDecimal === -3 ) {
+                        expressionOutput += "0.";
+                        input.value = expressionOutput; 
+                        
                     }
 
                     break; 

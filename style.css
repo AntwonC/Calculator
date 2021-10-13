@@ -82,7 +82,8 @@
 .number {
     margin: 0 auto;
     margin-bottom: 10px;
-    width: 50px;
+    width: 75px;
+    height: 50px;
     background-color: #50fff1;
     font-weight: bold;
 }
@@ -90,7 +91,8 @@
 .operation {
     margin: 0 auto; 
     margin-bottom: 10px;
-    width: 50px;
+    width: 75px;
+    height: 50px;
     background-color: lightgreen;
     font-weight: bold;
 }
