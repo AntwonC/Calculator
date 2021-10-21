@@ -262,7 +262,6 @@ function operationListeners() {
                     break; 
                 case "+": 
                     let resPlus = checkExpression(expressionOutput); 
-                    console.log("resPlus: " + resPlus); 
 
                     if ( resPlus === 3 ) {
                         console.log(`Expression: |${expressionOutput.replace(/\s/g, "")}|`);
@@ -290,8 +289,6 @@ function operationListeners() {
                 case "-": 
                     let resMinus = checkExpression(expressionOutput); 
 
-                    console.log(`resMinus: ${resMinus}`);
-
                     if ( resMinus === 3 ) {
                         expressionOutput += `0 - `;
                         input.value = expressionOutput; 
@@ -316,8 +313,6 @@ function operationListeners() {
                 case "*": 
                     let resMultiply = checkExpression(expressionOutput); 
 
-                    console.log(`resMultiply: ${resMultiply}`);
-
                     if ( resMultiply === 3 ) {
                         expressionOutput += `0 * `;
                         input.value = expressionOutput; 
@@ -340,8 +335,6 @@ function operationListeners() {
                     break;     
                 case "/": 
                     let resDivide = checkExpression(expressionOutput); 
-
-                    console.log(`resDivide: ${resDivide}`);
 
                     if ( resDivide === 3 ) {
                         expressionOutput += `0 / `;
