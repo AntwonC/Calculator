@@ -1,3 +1,4 @@
+/* Calculator numbers and operations STARTS*/
 #nine {
     grid-area: nine; 
 }
@@ -73,12 +74,9 @@
 #decimal {
     grid-area: decimal; 
 }
+/* Calculator numbers and operations ENDS*/
 
-/* #sqrt {
-    grid-area: sqrt; 
-} */
-
-
+/* Number Button Element */
 .number {
     margin: 0 auto;
     margin-bottom: 10px;
@@ -88,6 +86,7 @@
     font-weight: bold;
 }
 
+/* Operation Button Element */
 .operation {
     margin: 0 auto; 
     margin-bottom: 10px;
@@ -97,6 +96,7 @@
     font-weight: bold;
 }
 
+/* The grid calculator element */
 .calculator-container {
     display: flex;
     justify-content: center;  
@@ -137,10 +137,18 @@
         ". . . last"
         "input input input input"
         "del del clear clear"
-        "nine eight seven add"
-        "six five four subtract"
-        "three two one multiply"
+        "seven eight nine add"
+        "four five six subtract"
+        "one two three multiply"
         "decimal zero divide equal";
     background-color: lightgoldenrodyellow;
     padding-bottom: 20px; 
+}
+
+/* Copyright HTML */
+#copyright {
+    display: flex; 
+    justify-content: center;
+    margin-top: 50px; 
+    font-size: 50px;
 }
