@@ -16,7 +16,16 @@ function clear() {
 
 function deleteButton() {
     previousExpression.value = expressionOutput; 
-    input.value = expressionOutput.substring(0, expressionOutput.length-2);
+    
+    if ( input.value.length == 2 ) {
+        input.value = expressionOutput.substring(0, 1); 
+    } else if ( input.value.length <= 1) {
+        input.value = "";
+    } else {
+        //console.log(expressionOutput.substring(0, expressionOutput.length-1));
+        input.value = expressionOutput.substring(0, input.value.length-1);
+    } 
+    
 }
 
 function add(numberOne, numberTwo) {
@@ -252,7 +261,7 @@ function operationListeners() {
 
                     if ( resEqual === 1 ) {
                         result = equal(expressionOutput); 
-                        console.log(`In resEqual: ${result}`);
+                        
                         expressionOutput += ` = ${result}`;
                         previousExpression.value = expressionOutput;
                         input.value = result; 
@@ -264,7 +273,7 @@ function operationListeners() {
                     let resPlus = checkExpression(expressionOutput); 
 
                     if ( resPlus === 3 ) {
-                        console.log(`Expression: |${expressionOutput.replace(/\s/g, "")}|`);
+                        
                         expressionOutput += `0 + `;
                         input.value = expressionOutput; 
                     } else if ( resPlus === 0 ) {
